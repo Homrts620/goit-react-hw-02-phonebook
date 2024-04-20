@@ -17,7 +17,7 @@ class App extends Component {
     filter: "",
   };
 
-  checkContact = (newContact) => {
+checkContact = (newContact) => {
     const { contacts } = this.state;
     const isInBase = contacts.some(
       (contact) => contact.name.toLowerCase() === newContact.name.toLowerCase()
