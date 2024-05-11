@@ -7,7 +7,9 @@ import css from "./App.module.css";
 
 
 class App extends Component {
-  state = {
+  constructor(props) {
+    super(props)
+    this.state = {
     contacts: [
       { id: nanoid(), name: "Rosie Simpson", number: "459-12-56" },
       { id: nanoid(), name: "Hermione Kline", number: "443-89-12" },
@@ -15,6 +17,19 @@ class App extends Component {
       { id: nanoid(), name: "Annie Copeland", number: "227-91-26" },
     ],
     filter: "",
+  }
+}
+
+  componentDidMount() {
+    const storedContacts = localStorage.getItem('contacts')
+    if (storedContacts) {
+      this.setState({ contacts: JSON.parse(storedContacts) });
+    }
+  }
+  componentDidUpgrade(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem("contacts",JSON.stringify(this.state.contacts));
+    }
   };
 
 checkContact = (newContact) => {
@@ -31,6 +46,8 @@ addNewContact = (newContact) => {
     const { contacts } = this.state;
     contacts.push(newContact);
 this.setState({ contacts: contacts}); 
+
+localStorage.setItem('contacts', JSON.stringify(contacts));
   } else {
     alert  (`${newContact.name} is already in contacts`);
   }
@@ -44,6 +61,8 @@ deleteUser = (evt) => {
   const { contacts } = this.state;
   const filtered = contacts.filter((contact) => contact.id !== evt.target.id);
   this.setState({ contacts: filtered });
+
+  localStorage.setItem('contacts', JSON.stringify(filtered))
 };
 
 render() {
